@@ -99,12 +99,17 @@ enables RLS and revokes direct browser Data API access to those tables.
 
 ### Current API
 
-Both endpoints require `Authorization: Bearer <Supabase access token>`.
+Household endpoints require `Authorization: Bearer <Supabase access token>`.
 
 | Method | Endpoint | Behavior |
 | --- | --- | --- |
 | `GET` | `/api/households` | Lists households the current user belongs to |
+| `GET` | `/api/households/{id}` | Returns details for a household the current user belongs to |
 | `POST` | `/api/households` | Creates a household and adds its creator as a member |
+
+Household details include `id`, `name`, `ownerUserId`, `memberUserIds`, and `createdAt`.
+The details endpoint returns `401` without a valid Supabase token and `404` for both
+missing households and households the caller does not belong to. Invalid UUIDs return `400`.
 
 Example create request body:
 

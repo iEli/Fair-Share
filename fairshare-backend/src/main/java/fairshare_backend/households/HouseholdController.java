@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,13 @@ public class HouseholdController {
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
         UUID userId = authClient.requireUserId(authorization);
         return householdService.listForUser(userId);
+    }
+
+    @GetMapping("/{householdId}")
+    public HouseholdResponse details(@PathVariable UUID householdId,
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
+        UUID userId = authClient.requireUserId(authorization);
+        return householdService.getForUser(householdId, userId);
     }
 
     @PostMapping
