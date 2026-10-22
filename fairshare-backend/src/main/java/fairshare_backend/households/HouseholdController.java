@@ -1,5 +1,6 @@
 package fairshare_backend.households;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,10 +22,13 @@ public class HouseholdController {
 
     private final SupabaseAuthClient authClient;
     private final HouseholdService householdService;
+    private final HouseholdInviteService inviteService;
 
-    public HouseholdController(SupabaseAuthClient authClient, HouseholdService householdService) {
+    public HouseholdController(SupabaseAuthClient authClient, HouseholdService householdService,
+            HouseholdInviteService inviteService) {
         this.authClient = authClient;
         this.householdService = householdService;
+        this.inviteService = inviteService;
     }
 
     @GetMapping
@@ -39,6 +43,15 @@ public class HouseholdController {
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
         UUID userId = authClient.requireUserId(authorization);
         return householdService.getForUser(householdId, userId);
+    }
+
+    @PostMapping("/{householdId}/invites")
+    @ResponseStatus(HttpStatus.CREATED)
+    public HouseholdInviteResponse invite(@PathVariable UUID householdId,
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @Valid @RequestBody CreateInviteRequest request) {
+        UUID userId = authClient.requireUserId(authorization);
+        return inviteService.create(householdId, userId, request.email());
     }
 
     @PostMapping

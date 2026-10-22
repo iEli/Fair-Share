@@ -105,6 +105,7 @@ Household endpoints require `Authorization: Bearer <Supabase access token>`.
 | --- | --- | --- |
 | `GET` | `/api/households` | Lists households the current user belongs to |
 | `GET` | `/api/households/{id}` | Returns details for a household the current user belongs to |
+| `POST` | `/api/households/{id}/invites` | Owner creates an email-addressed roommate invitation |
 | `POST` | `/api/households` | Creates a household and adds its creator as a member |
 
 Household details include `id`, `name`, `ownerUserId`, `memberUserIds`, and `createdAt`.
@@ -220,3 +221,34 @@ configuration also applies to these endpoints. Frontend forms are still unwired.
 
 Auth tests mock Supabase REST responses; they do not create real accounts.
 See [Supabase password authentication](https://supabase.com/docs/guides/auth/passwords).
+
+
+## Roommate invitations
+
+Apply `supabase/migrations/20261021230445_create_household_invites.sql` to the intended
+Supabase database before calling the invitation endpoint. This migration adds only
+an invitation table, enables RLS, and denies browser Data API access, matching the
+existing household architecture. The backend does not apply it automatically.
+
+`POST /api/households/{id}/invites` requires a Supabase bearer token and JSON:
+
+```json
+{ "email": "roommate@example.com" }
+```
+
+Only an owner who is still a member can create an invitation. A successful `201`
+response includes `id`, `householdId`, normalized `email`, `code`, `createdAt`, and
+`expiresAt`. Codes contain 256 bits of secure randomness, expire after seven days,
+and are returned only at creation. The database stores only a SHA-256 hash of the
+code. Treat the returned code as a secret when sharing it with the intended roommate.
+
+An active invitation for the same household/email returns `409`. Reissuing an
+expired invitation rotates its code and resets its expiry. Ordinary members get
+`403`; nonmembers and missing households get `404`; missing/invalid authentication
+gets `401`. Malformed IDs or missing/invalid email bodies return `400`.
+
+This endpoint creates a pending invitation; it does not send email, create a Supabase
+account, or add a household member. Share the code manually for now. Accepting an
+invitation is a separate endpoint that is not implemented yet; it will need to
+verify the code hash, expiry, and the authenticated recipient's verified email,
+then atomically add membership and mark the invitation accepted.
