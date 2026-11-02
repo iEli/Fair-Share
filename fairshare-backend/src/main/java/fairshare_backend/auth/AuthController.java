@@ -19,8 +19,8 @@ public class AuthController {
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    AuthService.AuthResponse signup(@Valid @RequestBody Credentials body) {
-        return auth.signup(body.email(), body.password());
+    AuthService.AuthResponse signup(@Valid @RequestBody SignupRequest body) {
+        return auth.signup(body.email(), body.password(), body.firstName(), body.lastName());
     }
 
     @PostMapping("/login")
@@ -56,6 +56,15 @@ public class AuthController {
     public record Credentials(@NotBlank @Email @Size(max = 254) String email,
                               @NotBlank @Size(max = 4096) String password) {
         public Credentials { email = email == null ? null : email.strip().toLowerCase(Locale.ROOT); }
+    }
+    public record SignupRequest(@NotBlank @Email @Size(max = 254) String email,
+                                @NotBlank @Size(max = 4096) String password,
+                                @Size(max = 100) String firstName, @Size(max = 100) String lastName) {
+        public SignupRequest {
+            email = email == null ? null : email.strip().toLowerCase(Locale.ROOT);
+            firstName = firstName == null ? "" : firstName.strip();
+            lastName = lastName == null ? "" : lastName.strip();
+        }
     }
     public record RefreshRequest(@NotBlank @Size(max = 8192) String refresh_token) {}
 }

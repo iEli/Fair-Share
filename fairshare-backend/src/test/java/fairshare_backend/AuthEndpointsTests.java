@@ -83,6 +83,18 @@ class AuthEndpointsTests {
         assertNull(result.getRequest().getSession(false));
     }
 
+    @Test void signupPreservesNamesAsDisplayMetadata() throws Exception {
+        expectPost("/signup", """
+            {"email":"test@example.com","password":"a strong password",
+             "data":{"first_name":"Taylor","last_name":"Rivera"}}
+            """, USER);
+        mvc.perform(post("/api/auth/signup").contentType(MediaType.APPLICATION_JSON).content("""
+            {"email":"test@example.com","password":"a strong password",
+             "firstName":" Taylor ","lastName":"Rivera"}
+            """))
+            .andExpect(status().isCreated());
+    }
+
     @Test void signupSupportsImmediateSessionWhenConfirmationDisabled() throws Exception {
         expectPost("/signup", CREDENTIALS, SESSION);
         mvc.perform(post("/api/auth/signup").contentType(MediaType.APPLICATION_JSON).content(CREDENTIALS))

@@ -13,9 +13,9 @@ static HTML prototypes for CSCI-4440 Software Design and Documentation.
   inventory, and expense pages.
 - `docs/`: project documentation and team agreement.
 
-The Vue frontend currently contains the landing page. Its login and signup links
-are placeholders; frontend authentication and API integration are not yet wired
-up. The backend supports Supabase signup, login, token refresh, logout, and
+The Vue frontend contains the landing page. Its login and signup buttons open the
+shared HTML authentication pages, which call the Java API and support Supabase
+email confirmation. The backend supports signup, login, token refresh, logout, and
 creating and listing households for the signed-in user. Inventory and expense API endpoints are not implemented.
 
 ## Prerequisites
@@ -141,8 +141,8 @@ Use separate Vercel projects connected to this repository.
 - Build command: `npm run build`.
 - Output directory: `dist`.
 
-Frontend API configuration still needs to be implemented when connecting the UI
-to the backend. Never include database credentials in browser code.
+Set `VITE_API_BASE_URL` to the Java backend origin before building the frontend.
+Never include database credentials in browser code.
 
 ### Backend project
 
@@ -217,7 +217,7 @@ endpoint; existing household endpoints retain their own Supabase identity checks
 Invalid input returns `400`, authentication failure `401`, forbidden requests `403`,
 rate limits `429`, and upstream service failures `503` (malformed responses `502`).
 Responses exclude passwords and editable user metadata. The existing CORS
-configuration also applies to these endpoints. Frontend forms are still unwired.
+configuration also applies to these endpoints. The shared HTML forms call these endpoints.
 
 Auth tests mock Supabase REST responses; they do not create real accounts.
 See [Supabase password authentication](https://supabase.com/docs/guides/auth/passwords).
@@ -252,3 +252,35 @@ account, or add a household member. Share the code manually for now. Accepting a
 invitation is a separate endpoint that is not implemented yet; it will need to
 verify the code hash, expiry, and the authenticated recipient's verified email,
 then atomically add membership and mark the invitation accepted.
+
+
+## Connected login and signup pages
+
+Run the Java backend on port 8080 and `npm run dev` in `fairshare/`. The Vue landing
+page opens `/login.html` and `/signup.html`. Vite serves the canonical pages from
+`fairshare_site/` and includes them (plus the existing dashboard/inventory/expenses
+pages and shared assets) in the production build. Both landing-page versions link
+to the same forms; no duplicate HTML sources need to be maintained.
+
+Forms call `POST /api/auth/login` and `POST /api/auth/signup` as JSON. Signup checks
+matching passwords and forwards first/last names as Supabase display metadata.
+It shows a confirmation-email message when Supabase returns no session, and opens
+the dashboard when signup or login returns a session. The dashboard remains the
+existing prototype; household data is not connected in this change.
+
+For separate frontend/backend deployments, set `VITE_API_BASE_URL` to the HTTPS
+Java backend origin **before building**, and include the frontend origin in the
+backend's `APP_ALLOWED_ORIGINS`. See `fairshare/.env.example`. When blank, API
+requests use the frontend origin; Vite's dev server proxies `/api` to localhost:8080.
+For standalone `fairshare_site/` hosting, fill the `fairshare-api-base` meta tag in
+login/signup HTML with your backend origin, or reverse-proxy `/api` to the backend.
+
+Sessions use `sessionStorage` by default and `localStorage` when Remember me is
+checked. Only the user, tokens, and expiry are saved; passwords are never stored or
+placed in a URL. Future API consumers must send the access token as a bearer header
+and use the existing refresh endpoint to rotate expired tokens. No browser-side
+session is an authorization decision; the API still validates tokens.
+
+Run `npm test` and `npm run build` in `fairshare/`, and `./mvnw test` in
+`fairshare-backend/`. UI verification uses an isolated mock Supabase service and
+never creates a real account or sends email.
