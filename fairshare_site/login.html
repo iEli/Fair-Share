@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="fairshare-api-base" content="" />
+  <script type="module" src="auth.mjs"></script>
   <title>Log In | FairShare</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,15 +27,15 @@
           <p>Enter your account information to continue to your household.</p>
         </header>
 
-        <form class="auth-form" action="dashboard.html" method="get">
+        <form class="auth-form" data-auth="login" action="/api/auth/login" method="post">
           <label class="auth-field">
             <span>Email address</span>
-            <input type="email" name="email" placeholder="you@example.com" autocomplete="email" required />
+            <input type="email" name="email" maxlength="254" placeholder="you@example.com" autocomplete="email" required />
           </label>
 
           <label class="auth-field">
             <span>Password</span>
-            <input type="password" name="password" placeholder="Enter your password" autocomplete="current-password" required />
+            <input type="password" name="password" maxlength="4096" placeholder="Enter your password" autocomplete="current-password" required />
           </label>
 
           <div class="auth-form-options">
@@ -41,11 +43,14 @@
               <input type="checkbox" name="remember" />
               <span>Remember me</span>
             </label>
-            <a href="#">Forgot password?</a>
+
           </div>
 
           <button class="auth-submit" type="submit">Log In</button>
         </form>
+
+        <p class="auth-message" id="auth-message" role="status" aria-live="polite" tabindex="-1" hidden></p>
+        <noscript><p>Please enable JavaScript to sign in or create an account.</p></noscript>
 
         <p class="auth-switch">New to FairShare? <a href="signup.html">Create an account</a></p>
         <a class="auth-back-link" href="index.html">← Back to home</a>

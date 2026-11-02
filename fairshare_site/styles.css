@@ -232,7 +232,7 @@ body {
 }
 
 /* =========================================================
-   Dashboard — 
+   Dashboard —
    ========================================================= */
 .dashboard-body {
   min-height: 100vh;
@@ -1066,7 +1066,7 @@ body {
 }
 
 /* =========================================================
-   Expenses — 
+   Expenses —
    ========================================================= */
 .expenses-shell {
   grid-template-columns: 190px minmax(0, 1fr);
@@ -1364,7 +1364,7 @@ body {
      width: 100%;
      max-width: 400px;
      padding: 20px;
-   }  
+   }
    .auth-form-panel {
      width: 100%;
    }
@@ -1374,7 +1374,7 @@ body {
      border-radius: 8px;
      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
      padding: 20px;
-   }  
+   }
 
    .auth-card-header {
      margin-bottom: 20px;
@@ -1396,5 +1396,29 @@ body {
      display: flex;
      align-items: center;
      gap: 10px;
-   } 
-   
+   }
+
+
+/* Shared login/signup controls and accessible request feedback. */
+.auth-mobile-brand { display: inline-flex; align-items: center; gap: 10px; color: var(--color-primary); font-weight: 700; text-decoration: none; }
+.auth-card { padding: 28px; }
+.auth-card-header { margin-top: 24px; }
+.auth-card-header h2 { margin-bottom: 10px; font-size: 28px; letter-spacing: -.03em; }
+.auth-card-header p { color: var(--color-text-secondary); line-height: 1.5; }
+.auth-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; }
+.auth-field span { font-size: 13px; font-weight: 600; }
+.auth-field input { width: 100%; min-height: 43px; padding: 10px 12px; border: 1px solid var(--color-border); border-radius: 6px; font: inherit; font-size: 14px; }
+.auth-field input:focus-visible, .auth-submit:focus-visible, .auth-card a:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 2px; }
+.auth-field small { font-size: 11px; color: var(--color-text-secondary); }
+.auth-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.auth-checkbox { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; line-height: 1.5; }
+.auth-checkbox input { margin: 3px 0 0; accent-color: var(--color-primary); }
+.auth-submit { min-height: 44px; border: 0; border-radius: 6px; background: var(--color-primary); color: white; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+.auth-submit:hover { background: #12564f; }
+.auth-submit:disabled { opacity: .65; cursor: wait; }
+.auth-switch, .auth-back-link { font-size: 12px; line-height: 1.6; }
+.auth-card a { color: var(--color-primary); }
+.auth-message { padding: 12px; border-radius: 6px; font-size: 13px; line-height: 1.5; }
+.auth-message[data-kind="error"] { background: #fff0ee; color: #96372b; }
+.auth-message[data-kind="success"] { background: var(--color-primary-light); color: #12564f; }
+@media (max-width: 360px) { .auth-field-row { grid-template-columns: 1fr; } .auth-card { padding: 22px; } }

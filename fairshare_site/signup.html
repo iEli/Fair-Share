@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="fairshare-api-base" content="" />
+  <script type="module" src="auth.mjs"></script>
   <title>Sign Up | FairShare</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,33 +27,33 @@
           <p>Set up your FairShare account to get started.</p>
         </header>
 
-        <form class="auth-form" action="dashboard.html" method="get">
+        <form class="auth-form" data-auth="signup" action="/api/auth/signup" method="post">
           <div class="auth-field-row">
             <label class="auth-field">
               <span>First name</span>
-              <input type="text" name="first-name" placeholder="First name" autocomplete="given-name" required />
+              <input type="text" name="first-name" maxlength="100" placeholder="First name" autocomplete="given-name" required />
             </label>
 
             <label class="auth-field">
               <span>Last name</span>
-              <input type="text" name="last-name" placeholder="Last name" autocomplete="family-name" required />
+              <input type="text" name="last-name" maxlength="100" placeholder="Last name" autocomplete="family-name" required />
             </label>
           </div>
 
           <label class="auth-field">
             <span>Email address</span>
-            <input type="email" name="email" placeholder="you@example.com" autocomplete="email" required />
+            <input type="email" name="email" maxlength="254" placeholder="you@example.com" autocomplete="email" required />
           </label>
 
           <label class="auth-field">
             <span>Password</span>
-            <input type="password" name="password" placeholder="Create a password" autocomplete="new-password" minlength="8" required />
+            <input type="password" name="password" maxlength="4096" placeholder="Create a password" autocomplete="new-password" minlength="8" required />
             <small>Use at least 8 characters.</small>
           </label>
 
           <label class="auth-field">
             <span>Confirm password</span>
-            <input type="password" name="confirm-password" placeholder="Confirm your password" autocomplete="new-password" minlength="8" required />
+            <input type="password" name="confirm-password" maxlength="4096" placeholder="Confirm your password" autocomplete="new-password" minlength="8" required />
           </label>
 
           <label class="auth-checkbox auth-terms">
@@ -61,6 +63,9 @@
 
           <button class="auth-submit" type="submit">Create Account</button>
         </form>
+
+        <p class="auth-message" id="auth-message" role="status" aria-live="polite" tabindex="-1" hidden></p>
+        <noscript><p>Please enable JavaScript to sign in or create an account.</p></noscript>
 
         <p class="auth-switch">Already have an account? <a href="login.html">Log in</a></p>
         <a class="auth-back-link" href="index.html">← Back to home</a>

@@ -1,6 +1,7 @@
 package fairshare_backend.auth;
 
 import java.util.Map;
+import java.util.HashMap;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,8 +18,14 @@ public class AuthService {
 
     public AuthService(RestClient supabaseAuthRestClient) { this.client = supabaseAuthRestClient; }
 
-    AuthResponse signup(String email, String password) {
-        return authResponse(post("/signup", Map.of("email", email, "password", password), false));
+    AuthResponse signup(String email, String password, String firstName, String lastName) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("email", email);
+        body.put("password", password);
+        if (!firstName.isBlank() || !lastName.isBlank()) {
+            body.put("data", Map.of("first_name", firstName, "last_name", lastName));
+        }
+        return authResponse(post("/signup", body, false));
     }
 
     AuthResponse login(String email, String password) {
@@ -51,7 +58,7 @@ public class AuthService {
         }
     }
 
-    private JsonNode post(String path, Map<String, String> body, boolean authenticating) {
+    private JsonNode post(String path, Map<String, ?> body, boolean authenticating) {
         try {
             return client.post().uri(path).contentType(MediaType.APPLICATION_JSON).body(body)
                 .retrieve().body(JsonNode.class);

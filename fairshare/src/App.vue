@@ -15,8 +15,8 @@
         </div>
 
         <nav class="auth-actions" aria-label="Account actions">
-          <a class="btn btn-primary" href="#login">Log in <span aria-hidden="true">↗</span></a>
-          <a class="btn btn-secondary" href="#signup">Sign up</a>
+          <a class="btn btn-primary" href="/login.html">Log in <span aria-hidden="true">↗</span></a>
+          <a class="btn btn-secondary" href="/signup.html">Sign up</a>
         </nav>
       </div>
 
