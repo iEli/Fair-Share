@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log In | FairShare</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="auth-page">
+  <main class="auth-layout">
+
+    <section class="auth-form-panel">
+      <div class="auth-card">
+        <a class="auth-mobile-brand" href="index.html" aria-label="FairShare home">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span>FairShare</span>
+        </a>
+
+        <header class="auth-card-header">
+          <p class="auth-eyebrow">Account access</p>
+          <h2>Log in</h2>
+          <p>Enter your account information to continue to your household.</p>
+        </header>
+
+        <form class="auth-form" action="dashboard.html" method="get">
+          <label class="auth-field">
+            <span>Email address</span>
+            <input type="email" name="email" placeholder="you@example.com" autocomplete="email" required />
+          </label>
+
+          <label class="auth-field">
+            <span>Password</span>
+            <input type="password" name="password" placeholder="Enter your password" autocomplete="current-password" required />
+          </label>
+
+          <div class="auth-form-options">
+            <label class="auth-checkbox">
+              <input type="checkbox" name="remember" />
+              <span>Remember me</span>
+            </label>
+            <a href="#">Forgot password?</a>
+          </div>
+
+          <button class="auth-submit" type="submit">Log In</button>
+        </form>
+
+        <p class="auth-switch">New to FairShare? <a href="signup.html">Create an account</a></p>
+        <a class="auth-back-link" href="index.html">← Back to home</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

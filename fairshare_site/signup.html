@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up | FairShare</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="auth-page">
+  <main class="auth-layout">
+
+    <section class="auth-form-panel">
+      <div class="auth-card auth-card-signup">
+        <a class="auth-mobile-brand" href="index.html" aria-label="FairShare home">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span>FairShare</span>
+        </a>
+
+        <header class="auth-card-header">
+          <p class="auth-eyebrow">Create your account</p>
+          <h2>Sign up</h2>
+          <p>Set up your FairShare account to get started.</p>
+        </header>
+
+        <form class="auth-form" action="dashboard.html" method="get">
+          <div class="auth-field-row">
+            <label class="auth-field">
+              <span>First name</span>
+              <input type="text" name="first-name" placeholder="First name" autocomplete="given-name" required />
+            </label>
+
+            <label class="auth-field">
+              <span>Last name</span>
+              <input type="text" name="last-name" placeholder="Last name" autocomplete="family-name" required />
+            </label>
+          </div>
+
+          <label class="auth-field">
+            <span>Email address</span>
+            <input type="email" name="email" placeholder="you@example.com" autocomplete="email" required />
+          </label>
+
+          <label class="auth-field">
+            <span>Password</span>
+            <input type="password" name="password" placeholder="Create a password" autocomplete="new-password" minlength="8" required />
+            <small>Use at least 8 characters.</small>
+          </label>
+
+          <label class="auth-field">
+            <span>Confirm password</span>
+            <input type="password" name="confirm-password" placeholder="Confirm your password" autocomplete="new-password" minlength="8" required />
+          </label>
+
+          <label class="auth-checkbox auth-terms">
+            <input type="checkbox" name="terms" required />
+            <span>I agree to the FairShare terms and privacy policy.</span>
+          </label>
+
+          <button class="auth-submit" type="submit">Create Account</button>
+        </form>
+
+        <p class="auth-switch">Already have an account? <a href="login.html">Log in</a></p>
+        <a class="auth-back-link" href="index.html">← Back to home</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
