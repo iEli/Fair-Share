@@ -1,6 +1,8 @@
 package fairshare_backend.households;
 
 import java.sql.Timestamp;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -46,14 +48,33 @@ public class HouseholdService {
                 join public.household_members m on m.household_id = h.id
                 where m.user_id = ?
                 order by h.created_at desc
-                """, (row, rowNum) -> {
-            UUID householdId = row.getObject("id", UUID.class);
-            List<UUID> members = jdbcTemplate.query(
-                    "select user_id from public.household_members where household_id = ? order by joined_at, user_id",
-                    (memberRow, memberIndex) -> memberRow.getObject("user_id", UUID.class), householdId);
-            return new HouseholdResponse(householdId, row.getString("name"),
-                    row.getObject("owner_user_id", UUID.class), members,
-                    row.getTimestamp("created_at").toInstant());
-        }, userId);
+                """, this::toResponse, userId);
+    }
+
+    @Transactional(readOnly = true)
+    public HouseholdResponse getForUser(UUID householdId, UUID userId) {
+        var households = jdbcTemplate.query("""
+                select h.id, h.name, h.owner_user_id, h.created_at
+                from public.households h
+                where h.id = ? and exists (
+                    select 1 from public.household_members m
+                    where m.household_id = h.id and m.user_id = ?
+                )
+                """, this::toResponse, householdId, userId);
+        // Use the same response for missing and inaccessible households.
+        if (households.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Household not found");
+        }
+        return households.getFirst();
+    }
+
+    private HouseholdResponse toResponse(ResultSet row, int rowNum) throws SQLException {
+        UUID householdId = row.getObject("id", UUID.class);
+        List<UUID> members = jdbcTemplate.query(
+                "select user_id from public.household_members where household_id = ? order by joined_at, user_id",
+                (memberRow, memberIndex) -> memberRow.getObject("user_id", UUID.class), householdId);
+        return new HouseholdResponse(householdId, row.getString("name"),
+                row.getObject("owner_user_id", UUID.class), members,
+                row.getTimestamp("created_at").toInstant());
     }
 }

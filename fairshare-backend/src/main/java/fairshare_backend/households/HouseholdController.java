@@ -1,5 +1,6 @@
 package fairshare_backend.households;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -7,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,10 +22,13 @@ public class HouseholdController {
 
     private final SupabaseAuthClient authClient;
     private final HouseholdService householdService;
+    private final HouseholdInviteService inviteService;
 
-    public HouseholdController(SupabaseAuthClient authClient, HouseholdService householdService) {
+    public HouseholdController(SupabaseAuthClient authClient, HouseholdService householdService,
+            HouseholdInviteService inviteService) {
         this.authClient = authClient;
         this.householdService = householdService;
+        this.inviteService = inviteService;
     }
 
     @GetMapping
@@ -31,6 +36,22 @@ public class HouseholdController {
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
         UUID userId = authClient.requireUserId(authorization);
         return householdService.listForUser(userId);
+    }
+
+    @GetMapping("/{householdId}")
+    public HouseholdResponse details(@PathVariable UUID householdId,
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
+        UUID userId = authClient.requireUserId(authorization);
+        return householdService.getForUser(householdId, userId);
+    }
+
+    @PostMapping("/{householdId}/invites")
+    @ResponseStatus(HttpStatus.CREATED)
+    public HouseholdInviteResponse invite(@PathVariable UUID householdId,
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @Valid @RequestBody CreateInviteRequest request) {
+        UUID userId = authClient.requireUserId(authorization);
+        return inviteService.create(householdId, userId, request.email());
     }
 
     @PostMapping
