@@ -908,8 +908,27 @@ body {
   gap: 8px 9px;
 }
 
+#inventory-grid[hidden] {
+  display: none;
+}
+
+.inventory-message,
+.inventory-empty {
+  color: #596164;
+  font-size: 12px;
+}
+
+.inventory-message:empty {
+  display: none;
+}
+
+.inventory-empty {
+  grid-column: 1 / -1;
+  margin: 8px 0;
+}
+
 .inventory-card {
-  height: 72px;
+  min-height: 72px;
   padding: 6px 8px 5px;
   border: 1px solid #d3d8d6;
   border-radius: 9px;
@@ -1001,6 +1020,11 @@ body {
   cursor: pointer;
 }
 
+.item-actions button:disabled {
+  cursor: not-allowed;
+  opacity: .55;
+}
+
 .item-actions > button:not(.shopping-button) {
   width: 13px;
 }
@@ -1025,6 +1049,71 @@ body {
 .status-dot.stocked { background: #8af0c0; }
 .status-dot.low { background: #fff5aa; }
 .status-dot.out { background: #ffa8ae; }
+
+.inventory-dialog {
+  width: min(420px, calc(100vw - 32px));
+  padding: 0;
+  border: 1px solid #d3d8d6;
+  border-radius: 12px;
+  color: #303b3f;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, .2);
+}
+
+.inventory-dialog::backdrop {
+  background: rgba(25, 38, 40, .45);
+}
+
+.inventory-dialog form {
+  display: grid;
+  gap: 14px;
+  padding: 22px;
+}
+
+.inventory-dialog h2 {
+  margin: 0;
+  font: 600 18px "Poppins", "Inter", Arial, sans-serif;
+}
+
+.inventory-dialog label {
+  display: grid;
+  gap: 5px;
+  font-size: 13px;
+}
+
+.inventory-dialog input {
+  min-height: 36px;
+  padding: 6px 9px;
+  border: 1px solid #b8bdbb;
+  border-radius: 5px;
+  font: inherit;
+}
+
+.inventory-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.inventory-dialog-actions button {
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid #b8bdbb;
+  border-radius: 5px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.inventory-dialog-actions button[type="submit"] {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.inventory-form-error {
+  margin: 0;
+  color: #a22b36;
+  font-size: 13px;
+}
 
 @media (max-width: 760px) {
   .inventory-shell {

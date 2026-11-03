@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="fairshare-api-base" content="" />
+  <script type="module" src="inventory.mjs"></script>
   <title>FairShare Inventory</title>
 
   <!-- Uses the same shared stylesheet as index.html and dashboard.html -->
@@ -25,7 +27,7 @@
             <svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5V21H3z"/><path d="M8 21v-7h8v7"/></svg>
           </span>
           <span>
-            <strong>Theoretical House</strong>
+            <strong id="household-name">Theoretical House</strong>
             <small>Troy, NY (RPI)</small>
           </span>
         </a>
@@ -96,7 +98,7 @@
     <section class="dashboard-main inventory-main">
       <header class="topbar inventory-topbar">
         <div class="breadcrumbs" aria-label="Breadcrumb">
-          <a href="dashboard.html">Theoretical House</a>
+          <a id="breadcrumb-household" href="dashboard.html">Theoretical House</a>
           <span aria-hidden="true">→</span>
           <span>Inventory</span>
         </div>
@@ -118,13 +120,14 @@
             <h1>INVENTORY</h1>
             <p>What’s in stock?</p>
           </div>
-          <button class="add-inventory-button" type="button" aria-label="Add inventory item">+</button>
+          <button class="add-inventory-button" id="add-inventory-button" type="button" aria-label="Add inventory item" disabled>+</button>
         </div>
 
+        <p id="inventory-message" class="inventory-message" role="status" aria-live="polite"></p>
         <div class="inventory-tools">
           <label class="inventory-search">
             <span class="sr-only">Search inventory</span>
-            <input type="search" placeholder="Search Inventory..." />
+            <input id="inventory-search" type="search" placeholder="Search Inventory..." />
           </label>
           <div class="stock-legend" aria-label="Stock status legend">
             <span class="stock-pill stocked">Stocked</span>
@@ -133,7 +136,7 @@
           </div>
         </div>
 
-        <section class="inventory-grid" aria-label="Household inventory">
+        <section id="inventory-grid" class="inventory-grid" aria-label="Household inventory" hidden>
           <article class="inventory-card" data-status="low">
             <div class="item-top">
               <div class="item-icon">🥛</div>
@@ -260,6 +263,33 @@
             <div class="item-actions"><button>＋</button><button>−</button><button class="shopping-button">Add to shopping list</button><span class="status-dot out"></span></div>
           </article>
         </section>
+
+        <dialog id="add-inventory-dialog" class="inventory-dialog">
+          <form id="add-inventory-form">
+            <h2>Add inventory item</h2>
+            <label>
+              <span>Name</span>
+              <input name="name" maxlength="100" required />
+            </label>
+            <label>
+              <span>Category</span>
+              <input name="category" maxlength="60" value="Grocery" required />
+            </label>
+            <label>
+              <span>Icon (optional)</span>
+              <input name="icon" maxlength="16" placeholder="📦" />
+            </label>
+            <label>
+              <span>Starting quantity</span>
+              <input name="quantity" type="number" min="0" max="1000000" value="0" required />
+            </label>
+            <p id="inventory-form-error" class="inventory-form-error" role="alert" hidden></p>
+            <div class="inventory-dialog-actions">
+              <button type="button" id="cancel-add-item">Cancel</button>
+              <button type="submit">Add item</button>
+            </div>
+          </form>
+        </dialog>
       </main>
     </section>
   </div>
