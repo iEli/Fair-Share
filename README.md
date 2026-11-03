@@ -15,8 +15,8 @@ static HTML prototypes for CSCI-4440 Software Design and Documentation.
 
 The Vue frontend contains the landing page. Its login and signup buttons open the
 shared HTML authentication pages, which call the Java API and support Supabase
-email confirmation. The backend supports signup, login, token refresh, logout, and
-creating and listing households for the signed-in user. Inventory and expense API endpoints are not implemented.
+email confirmation. The backend supports signup, login, token refresh, logout, household management,
+and household-scoped inventory. Expense API endpoints are not implemented.
 
 ## Prerequisites
 
@@ -91,11 +91,14 @@ or configure them in your IDE. The `--env-file` option below is for Docker.
 Apply `supabase/migrations/20260929211542_create_households_and_members.sql`
 to the intended Supabase project before using the household endpoints. It creates
 the household and membership tables and links users to Supabase Auth accounts.
-The backend does not automatically apply migrations or create tables.
+Also apply `supabase/migrations/20261102221100_create_inventory_items.sql` to
+create the household inventory table. The backend does not automatically apply
+migrations or create tables.
 Hibernate is configured to validate mapped schema.
 
-Household table access goes through the authenticated Java API. The migration
-enables RLS and revokes direct browser Data API access to those tables.
+Household and inventory table access goes through the authenticated Java API.
+The migrations enable RLS and revoke direct browser Data API access to those
+tables.
 
 ### Current API
 
@@ -107,6 +110,9 @@ Household endpoints require `Authorization: Bearer <Supabase access token>`.
 | `GET` | `/api/households/{id}` | Returns details for a household the current user belongs to |
 | `POST` | `/api/households/{id}/invites` | Owner creates an email-addressed roommate invitation |
 | `POST` | `/api/households` | Creates a household and adds its creator as a member |
+| `GET` | `/api/households/{id}/inventory` | Lists household inventory items |
+| `POST` | `/api/households/{id}/inventory` | Adds an item with its starting quantity |
+| `PATCH` | `/api/households/{id}/inventory/{itemId}/quantity` | Adds or removes one item from stock (`delta` is `1` or `-1`) |
 
 Household details include `id`, `name`, `ownerUserId`, `memberUserIds`, and `createdAt`.
 The details endpoint returns `401` without a valid Supabase token and `404` for both
@@ -258,22 +264,26 @@ then atomically add membership and mark the invitation accepted.
 
 Run the Java backend on port 8080 and `npm run dev` in `fairshare/`. The Vue landing
 page opens `/login.html` and `/signup.html`. Vite serves the canonical pages from
-`fairshare_site/` and includes them (plus the existing dashboard/inventory/expenses
-pages and shared assets) in the production build. Both landing-page versions link
-to the same forms; no duplicate HTML sources need to be maintained.
+`fairshare_site/` and includes them (plus the dashboard/inventory/expenses pages
+and shared assets) in the production build. The inventory page loads the signed-in
+user's most recently created household, creates a "Theoretical House" if the user
+has none, and reads and updates its SQL-backed inventory. No login is required:
+guests can use the inventory immediately, with changes saved locally in that
+browser and not shared with other users or devices.
 
 Forms call `POST /api/auth/login` and `POST /api/auth/signup` as JSON. Signup checks
 matching passwords and forwards first/last names as Supabase display metadata.
 It shows a confirmation-email message when Supabase returns no session, and opens
-the dashboard when signup or login returns a session. The dashboard remains the
-existing prototype; household data is not connected in this change.
+the dashboard when signup or login returns a session. The dashboard and expense
+page remain prototypes.
 
 For separate frontend/backend deployments, set `VITE_API_BASE_URL` to the HTTPS
 Java backend origin **before building**, and include the frontend origin in the
 backend's `APP_ALLOWED_ORIGINS`. See `fairshare/.env.example`. When blank, API
 requests use the frontend origin; Vite's dev server proxies `/api` to localhost:8080.
 For standalone `fairshare_site/` hosting, fill the `fairshare-api-base` meta tag in
-login/signup HTML with your backend origin, or reverse-proxy `/api` to the backend.
+login/signup/inventory HTML with your backend origin, or reverse-proxy `/api` to
+the backend.
 
 Sessions use `sessionStorage` by default and `localStorage` when Remember me is
 checked. Only the user, tokens, and expiry are saved; passwords are never stored or

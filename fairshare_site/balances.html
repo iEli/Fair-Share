@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Balances | FairShare</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="dashboard-body">
+  <div class="dashboard-shell">
+    <aside class="sidebar">
+      <a class="dashboard-brand" href="index.html" aria-label="FairShare home"><span class="brand-mark" aria-hidden="true"></span><span>FairShare</span></a>
+      <nav class="sidebar-nav" aria-label="Main navigation">
+        <a class="nav-item house-switcher" href="dashboard.html"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5V21H3z"/><path d="M8 21v-7h8v7"/></svg></span><span><strong>Theoretical House</strong><small>Troy, NY (RPI)</small></span></a>
+        <a class="nav-item" href="inventory.html"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7h12l3 3v10H4z"/><path d="M8 7V4h6v3"/></svg></span><span>Inventory</span></a>
+        <a class="nav-item" href="expenses.html"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M17 7.5c-1.3-1-3-1.5-5-1.5-3 0-5 1.4-5 3.5S9 13 12 13s5 1.4 5 3.5S15 20 12 20c-2 0-3.7-.5-5-1.5"/></svg></span><span>Expenses</span></a>
+        <a class="nav-item active" href="balances.html" aria-current="page"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h10M7 15h4"/></svg></span><span>Balances</span></a>
+        <a class="nav-item" href="shopping-list.html"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 5h14l-1 15H6L5 5z"/><path d="M9 5a3 3 0 0 1 6 0M9 10v6M15 10v6"/></svg></span><span>Shopping List</span></a>
+        <a class="nav-item" href="bills.html"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></span><span>Bills</span></a>
+        <a class="nav-item" href="activity.html"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 12h4l2-6 4 13 2-7h6"/></svg></span><span>Activity</span></a>
+        <a class="nav-item" href="#"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 10v6M12 7h.01"/></svg></span><span>Report</span></a>
+      </nav>
+      <div class="sidebar-footer"><p>Elias Nemiri<br>John Risi<br>Ervin Owusu<br>India Gaffney<br>Carolyn Shao</p><strong>RPI · CSCI 4440</strong></div>
+    </aside>
+    <section class="dashboard-main">
+      <header class="topbar"><span class="house-name">Theoretical House</span><div class="topbar-actions"><button class="icon-button" type="button" aria-label="Help"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.4 2.4 0 0 1 4.7.7c0 1.8-2.5 2-2.5 3.8"/><path d="M12 17h.01"/></svg></button><button class="avatar-button" type="button" aria-label="Account">E</button></div></header>
+      <main class="simple-page-content">
+        <p class="simple-page-eyebrow">THEORETICAL HOUSE</p>
+        <h1>Balances</h1>
+        <p class="simple-page-intro">A quick snapshot of what each roommate is owed.</p>
+        <section class="balance-summary" aria-label="Your total balance">
+          <div><p>Your balance</p><strong>$30.00</strong><span>You are owed</span></div>
+          <div class="balance-summary-note">Balances shown are sample amounts for this prototype.</div>
+        </section>
+        <section class="simple-card-grid" aria-label="Roommate balances">
+          <article class="simple-card balance-card"><div class="simple-avatar">E</div><div class="simple-card-copy"><h2>Elias Nemiri</h2><p>Current balance</p></div><strong class="balance-positive">+$30.00</strong></article>
+          <article class="simple-card balance-card"><div class="simple-avatar">J</div><div class="simple-card-copy"><h2>John Risi</h2><p>Current balance</p></div><strong class="balance-negative">−$6.00</strong></article>
+          <article class="simple-card balance-card"><div class="simple-avatar">E</div><div class="simple-card-copy"><h2>Ervin Owusu</h2><p>Current balance</p></div><strong class="balance-positive">+$61.00</strong></article>
+          <article class="simple-card balance-card"><div class="simple-avatar">I</div><div class="simple-card-copy"><h2>India Gaffney</h2><p>Current balance</p></div><strong class="balance-negative">−$25.00</strong></article>
+          <article class="simple-card balance-card"><div class="simple-avatar">C</div><div class="simple-card-copy"><h2>Carolyn Shao</h2><p>Current balance</p></div><strong class="balance-negative">−$60.00</strong></article>
+        </section>
+      </main>
+    </section>
+  </div>
+</body>
+</html>
