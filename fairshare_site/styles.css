@@ -610,6 +610,381 @@ body {
   font-weight: 500;
 }
 
+/* Static household overview pages */
+.simple-page-content {
+  width: min(100%, 1120px);
+  margin: 0 auto;
+  padding: 34px clamp(18px, 4vw, 52px) 48px;
+}
+
+.simple-page-eyebrow {
+  margin: 0 0 8px;
+  color: var(--color-primary);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+}
+
+.simple-page-content > h1 {
+  margin: 0;
+  color: #303b3f;
+  font-family: "Poppins", "Inter", Arial, sans-serif;
+  font-size: clamp(28px, 4vw, 38px);
+  line-height: 1.15;
+  font-weight: 500;
+}
+
+.simple-page-intro {
+  margin: 9px 0 26px;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+}
+
+.balance-summary,
+.shopping-list-panel,
+.activity-panel {
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background: var(--color-surface);
+  box-shadow: 0 4px 18px rgba(38, 50, 56, .04);
+}
+
+.balance-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 23px 26px;
+  border-left: 5px solid var(--color-primary);
+}
+
+.balance-summary p,
+.balance-summary span {
+  display: block;
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+
+.balance-summary strong {
+  display: block;
+  margin: 5px 0;
+  color: var(--color-primary);
+  font-size: 34px;
+  line-height: 1.1;
+}
+
+.balance-summary-note,
+.simple-page-note {
+  color: var(--color-text-secondary);
+  font-size: 12px;
+}
+
+.simple-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.simple-card {
+  min-width: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+}
+
+.balance-card {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 16px;
+}
+
+.simple-avatar,
+.bill-icon {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.simple-card-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.simple-card-copy h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.simple-card-copy p {
+  margin: 4px 0 0;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+}
+
+.balance-card > strong {
+  white-space: nowrap;
+  font-size: 17px;
+}
+
+.balance-positive { color: var(--color-success); }
+.balance-negative { color: var(--color-error); }
+
+.shopping-list-panel,
+.activity-panel {
+  padding: 22px;
+}
+
+.shopping-list-panel > h2,
+.activity-panel > h2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0;
+  color: var(--color-text);
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.shopping-list-panel > h2 span {
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.shopping-todo-list {
+  display: grid;
+  gap: 0;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.shopping-todo-list li {
+  border-top: 1px solid #edf0ef;
+}
+
+.shopping-todo-list label {
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.shopping-todo-list input {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--color-primary);
+}
+
+.todo-item-icon {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: #f1f5f4;
+  font-size: 19px;
+}
+
+.shopping-todo-list label > span:last-child {
+  color: var(--color-text);
+  font-size: 14px;
+}
+
+.shopping-todo-list label small {
+  display: block;
+  margin-top: 3px;
+  color: var(--color-text-secondary);
+  font-size: 11px;
+}
+
+.shopping-todo-list input:checked + .todo-item-icon + span {
+  color: #899391;
+  text-decoration: line-through;
+}
+
+.simple-page-note {
+  margin: 17px 0 0;
+  line-height: 1.5;
+}
+
+.bill-card-list {
+  display: grid;
+  gap: 12px;
+}
+
+.bill-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 17px;
+}
+
+.bill-icon {
+  border-radius: 10px;
+  font-size: 21px;
+}
+
+.bill-card .bill-requester {
+  margin: 0 0 5px;
+  color: var(--color-primary);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .06em;
+}
+
+.bill-card .bill-requester + h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.bill-cost {
+  display: grid;
+  gap: 4px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.bill-cost strong {
+  color: var(--color-text);
+  font-size: 18px;
+}
+
+.bill-cost span {
+  color: var(--color-text-secondary);
+  font-size: 11px;
+}
+
+.activity-list {
+  display: grid;
+  margin: 15px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.activity-list li {
+  min-height: 76px;
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 13px;
+  border-top: 1px solid #edf0ef;
+}
+
+.activity-marker {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.activity-marker.paid {
+  background: #e4f4eb;
+  color: var(--color-success);
+}
+
+.activity-marker.request {
+  background: #fff3da;
+  color: #b27914;
+}
+
+.activity-list h3 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.activity-list p {
+  margin: 4px 0 0;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+}
+
+.activity-list time {
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.activity-list li > strong {
+  min-width: 65px;
+  color: var(--color-text);
+  font-size: 14px;
+  text-align: right;
+}
+
+@media (max-width: 620px) {
+  .simple-page-content {
+    padding: 25px 16px 36px;
+  }
+
+  .simple-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .balance-summary {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 19px;
+  }
+
+  .bill-card {
+    align-items: flex-start;
+    gap: 11px;
+    padding: 13px;
+  }
+
+  .bill-cost {
+    margin-left: auto;
+  }
+
+  .bill-cost strong {
+    font-size: 15px;
+  }
+
+  .activity-panel,
+  .shopping-list-panel {
+    padding: 16px;
+  }
+
+  .activity-list li {
+    grid-template-columns: 34px minmax(0, 1fr) auto;
+    gap: 9px;
+    padding: 8px 0;
+  }
+
+  .activity-list time {
+    grid-column: 2;
+  }
+
+  .activity-list li > strong {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+  }
+}
+
 /* Keep the composition responsive without changing the desktop mockup. */
 @media (min-width: 753px) {
   .dashboard-shell {
