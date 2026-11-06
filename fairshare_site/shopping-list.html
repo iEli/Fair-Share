@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Shopping List | FairShare</title>
+  <script type="module" src="shopping-list.mjs"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
@@ -32,7 +33,29 @@
         <h1>Shopping List</h1>
         <p class="simple-page-intro">A few things your household needs on the next store run.</p>
         <section class="shopping-list-panel" aria-label="Shopping to-do list">
-          <h2>To pick up <span>6 items</span></h2>
+          <h2>To pick up <span id="shopping-count" aria-live="polite">6 items</span></h2>
+          <!-- Collects the name and optional details for a new item. -->
+          <form id="shopping-add-form" class="shopping-add-form">
+            <label>
+              Item name
+              <input id="shopping-item-name" name="item-name" type="text" placeholder="e.g. Apples" maxlength="80" required />
+            </label>
+            <label>
+              Category
+              <select name="category">
+                <option value="">Choose a category</option>
+                <option>Grocery</option>
+                <option>Household</option>
+                <option>Other</option>
+              </select>
+            </label>
+            <label>
+              Added by
+              <input name="added-by" type="text" placeholder="e.g. Ervin" maxlength="40" />
+            </label>
+            <button type="submit">Add item</button>
+          </form>
+          <!-- Sample items shown on every visit. -->
           <ul class="shopping-todo-list">
             <li><label><input type="checkbox"><span class="todo-item-icon">🥛</span><span>Milk<small>Grocery · Added by India</small></span></label></li>
             <li><label><input type="checkbox"><span class="todo-item-icon">🍞</span><span>Whole wheat bread<small>Grocery · Added by John</small></span></label></li>
@@ -41,7 +64,17 @@
             <li><label><input type="checkbox"><span class="todo-item-icon">🍌</span><span>Bananas<small>Grocery · Added by Ervin</small></span></label></li>
             <li><label><input type="checkbox"><span class="todo-item-icon">🧀</span><span>Cheddar cheese<small>Grocery · Added by India</small></span></label></li>
           </ul>
-          <p class="simple-page-note">Sample list for this prototype. Check items off as you shop.</p>
+          <!-- The script copies this row for each added item. -->
+          <template id="shopping-item-template">
+            <li>
+              <label>
+                <input type="checkbox" />
+                <span class="todo-item-icon" aria-hidden="true">🛒</span>
+                <span><span class="shopping-item-name"></span><small></small></span>
+              </label>
+            </li>
+          </template>
+          <p class="simple-page-note">Items you add are saved in this browser. Check items off as you shop.</p>
         </section>
       </main>
     </section>
