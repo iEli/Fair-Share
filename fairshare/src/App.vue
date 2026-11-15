@@ -5,6 +5,7 @@
   <main class="page-shell">
     <!-- The hero introduces FairShare and provides links to the account pages. -->
     <section class="hero" aria-labelledby="hero-title">
+      <video class="hero-video" src="/fairshare-hero.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
       <div class="hero-shade" aria-hidden="true"></div>
 
       <div class="hero-content">
@@ -138,7 +139,16 @@ a {
   background-size: cover;
 }
 
-/* Darken the photo behind the hero text to improve contrast. */
+.hero-video {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Darken the hero background to keep the text readable. */
 .hero-shade {
   position: absolute;
   z-index: -1;
@@ -459,6 +469,10 @@ h1 span {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .hero-video {
+    display: none;
+  }
+
   *,
   *::before,
   *::after {
