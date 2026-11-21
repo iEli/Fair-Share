@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="fairshare-api-base" content="" />
   <title>FairShare Purchases &amp; Expenses</title>
 
   <!-- Uses the same shared stylesheet as index.html, dashboard.html, and inventory.html -->
@@ -25,7 +26,7 @@
             <svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5V21H3z"/><path d="M8 21v-7h8v7"/></svg>
           </span>
           <span>
-            <strong>Theoretical House</strong>
+            <strong data-expense-household>Theoretical House</strong>
             <small>Troy, NY (RPI)</small>
           </span>
         </a>
@@ -96,9 +97,9 @@
     <section class="dashboard-main expenses-main">
       <header class="topbar inventory-topbar expenses-topbar">
         <div class="breadcrumbs" aria-label="Breadcrumb">
-          <a href="dashboard.html">Theoretical House</a>
+          <a href="dashboard.html" data-expense-household>Theoretical House</a>
           <span aria-hidden="true">→</span>
-          <a href="inventory.html">Inventory</a>
+          <span aria-current="page">Expenses</span>
         </div>
 
         <div class="topbar-actions">
@@ -120,104 +121,59 @@
         <div class="expenses-toolbar">
           <label class="expenses-search">
             <span class="sr-only">Search purchases and expenses</span>
-            <input type="search" placeholder="Search item or purchaser..." />
+            <input id="expense-search" type="search" placeholder="Search expenses…" />
           </label>
 
           <div class="expense-filters" aria-label="Expense status filters">
-            <button class="filter-button active" type="button">All</button>
-            <button class="filter-button" type="button">Paid</button>
-            <button class="filter-button" type="button">Unpaid</button>
+            <button class="filter-button active" type="button" data-expense-filter="all" aria-pressed="true">All</button>
+            <button class="filter-button" type="button" data-expense-filter="paid" aria-pressed="false">Paid</button>
+            <button class="filter-button" type="button" data-expense-filter="unpaid" aria-pressed="false">Unpaid</button>
           </div>
 
-          <button class="add-expense-button" type="button" aria-label="Add purchase or expense">+</button>
+          <button id="add-expense-button" class="add-expense-button" type="button"
+            aria-label="Add purchase or expense" aria-haspopup="dialog" disabled>+</button>
         </div>
+
+        <p id="expense-message" class="expense-message" role="status">Loading expenses…</p>
 
         <section class="purchase-panel" aria-label="Purchases and expenses">
           <div class="purchase-grid purchase-header" aria-hidden="true">
-            <span>Item Purchased</span>
+            <span>Item purchased</span>
             <span>Purchased by</span>
             <span>Amount</span>
             <span>Status</span>
-            <span>Split</span>
-            <span></span>
           </div>
-
-          <div class="purchase-list">
-            <article class="purchase-grid purchase-row">
-              <div class="purchase-item">
-                <div class="purchase-icon">🍕</div>
-                <div>
-                  <h2>Pizza</h2>
-                  <p>Food · 2026-09-23<br>Quantity: 3</p>
-                </div>
-              </div>
-              <div class="purchase-person">Ervin</div>
-              <div class="purchase-amount">$30.00</div>
-              <div class="purchase-status">
-                <strong>Unpaid</strong>
-                <small>$16.00 still owed to Ervin<br>0/4 roommates repaid</small>
-              </div>
-              <div class="purchase-split">Even</div>
-              <button class="purchase-actions" type="button">Actions</button>
-            </article>
-
-            <article class="purchase-grid purchase-row">
-              <div class="purchase-item">
-                <div class="purchase-icon">🧼</div>
-                <div>
-                  <h2>Hand soap</h2>
-                  <p>Essentials · 2026-09-23<br>Quantity: 2</p>
-                </div>
-              </div>
-              <div class="purchase-person">India</div>
-              <div class="purchase-amount">$10.00</div>
-              <div class="purchase-status">
-                <strong>Paid</strong>
-                <small>$10.00 owed to India<br>4/4 roommates repaid</small>
-              </div>
-              <div class="purchase-split">Even</div>
-              <button class="purchase-actions" type="button">Actions</button>
-            </article>
-
-            <article class="purchase-grid purchase-row">
-              <div class="purchase-item">
-                <div class="purchase-icon">🧻</div>
-                <div>
-                  <h2>Toiletries</h2>
-                  <p>Essentials · 2026-09-23<br>Quantity: 5</p>
-                </div>
-              </div>
-              <div class="purchase-person">Elias</div>
-              <div class="purchase-amount">$32.84</div>
-              <div class="purchase-status">
-                <strong>Unpaid</strong>
-                <small>$10.94 still owed to Ervin<br>2/3 roommates repaid</small>
-              </div>
-              <div class="purchase-split">Even</div>
-              <button class="purchase-actions" type="button">Actions</button>
-            </article>
-
-            <article class="purchase-grid purchase-row">
-              <div class="purchase-item">
-                <div class="purchase-icon">🍪</div>
-                <div>
-                  <h2>Snacks</h2>
-                  <p>Food · 2026-09-23<br>Quantity: 3</p>
-                </div>
-              </div>
-              <div class="purchase-person">John</div>
-              <div class="purchase-amount">$12.11</div>
-              <div class="purchase-status">
-                <strong>Paid</strong>
-                <small>$12.11 owed to John<br>2/2 roommates repaid</small>
-              </div>
-              <div class="purchase-split">Even</div>
-              <button class="purchase-actions" type="button">Actions</button>
-            </article>
-          </div>
+          <div id="expense-list" class="purchase-list"></div>
+          <button id="load-expenses" class="expense-load-button" type="button" hidden>Load older expenses</button>
         </section>
+
+        <dialog id="add-expense-dialog" class="inventory-dialog" aria-labelledby="add-expense-title">
+          <form id="add-expense-form">
+            <h2 id="add-expense-title">Add expense</h2>
+            <label>
+              Description
+              <input name="description" maxlength="200" required autofocus />
+            </label>
+            <label>
+              Amount (USD)
+              <input name="amount" type="number" min="0.01" max="9999999999.99" step="0.01"
+                inputmode="decimal" required />
+            </label>
+            <label>
+              Purchase date
+              <input name="spentOn" type="date" min="0001-01-01" max="9999-12-31" required />
+            </label>
+            <p id="expense-split-note" class="expense-split-note"></p>
+            <p id="expense-form-error" class="inventory-form-error" role="alert" hidden></p>
+            <div class="inventory-dialog-actions">
+              <button id="cancel-expense" type="button">Cancel</button>
+              <button type="submit">Save expense</button>
+            </div>
+          </form>
+        </dialog>
       </main>
     </section>
   </div>
+  <script type="module" src="expenses.mjs"></script>
 </body>
 </html>

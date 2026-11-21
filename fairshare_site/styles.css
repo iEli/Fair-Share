@@ -1640,15 +1640,15 @@ body {
 
 .expenses-toolbar {
   display: grid;
-  grid-template-columns: minmax(270px, 376px) auto 35px;
+  grid-template-columns: minmax(0, 376px) auto 40px;
   gap: 13px;
   align-items: center;
-  margin: 21px 0 27px 21px;
+  margin: 21px 10px 14px 0;
 }
 
 .expenses-search input {
   width: 100%;
-  height: 25px;
+  height: 36px;
   padding: 0 10px;
   border: 1px solid #b8bdbb;
   border-radius: 4px;
@@ -1656,7 +1656,7 @@ body {
   background: #fff;
   color: #3e474a;
   font: inherit;
-  font-size: 7px;
+  font-size: 13px;
 }
 
 .expenses-search input::placeholder {
@@ -1669,7 +1669,7 @@ body {
 }
 
 .expense-filters {
-  height: 25px;
+  height: 36px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1680,20 +1680,20 @@ body {
 }
 
 .filter-button {
-  height: 23px;
+  height: 34px;
   min-width: 37px;
   padding: 0 8px;
   border: 0;
   background: transparent;
   color: #3d4547;
   font-family: inherit;
-  font-size: 7px;
+  font-size: 13px;
   cursor: pointer;
 }
 
 .filter-button.active {
   margin: 2px;
-  height: 19px;
+  height: 30px;
   min-width: 22px;
   padding-inline: 6px;
   border-radius: 3px;
@@ -1702,8 +1702,8 @@ body {
 }
 
 .add-expense-button {
-  width: 35px;
-  height: 35px;
+  width: 40px;
+  height: 40px;
   display: grid;
   place-items: center;
   border: 0;
@@ -1729,16 +1729,16 @@ body {
 
 .purchase-grid {
   display: grid;
-  grid-template-columns: minmax(148px, 1.8fr) minmax(68px, .92fr) minmax(62px, .72fr) minmax(90px, 1.22fr) minmax(51px, .66fr) minmax(63px, .75fr);
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.15fr);
   column-gap: 7px;
   align-items: center;
 }
 
 .purchase-header {
-  min-height: 23px;
-  padding: 0 2px 4px 23px;
+  min-height: 34px;
+  padding: 0 0 8px;
   color: #202628;
-  font-size: 7px;
+  font-size: 13px;
   line-height: 1;
   font-weight: 500;
 }
@@ -1749,7 +1749,10 @@ body {
 }
 
 .purchase-row {
-  min-height: 46px;
+  min-height: 52px;
+  padding: 8px 0;
+  border-top: 1px solid #d3d8d6;
+  overflow-wrap: anywhere;
   color: #283134;
   font-size: 11px;
   line-height: 1.05;
@@ -1760,18 +1763,6 @@ body {
   align-items: center;
   gap: 12px;
   min-width: 0;
-}
-
-.purchase-icon {
-  width: 40px;
-  height: 40px;
-  flex: 0 0 40px;
-  display: grid;
-  place-items: center;
-  border-radius: 6px;
-  background: #c5ddd8;
-  font-size: 20px;
-  line-height: 1;
 }
 
 .purchase-item h2 {
@@ -1785,14 +1776,12 @@ body {
 .purchase-item p {
   margin: 2px 0 0;
   color: #4d5659;
-  font-size: 6px;
+  font-size: 12px;
   line-height: 1.12;
-  white-space: nowrap;
 }
 
 .purchase-person,
-.purchase-amount,
-.purchase-split {
+.purchase-amount {
   font-size: 11px;
   font-weight: 400;
 }
@@ -1809,35 +1798,45 @@ body {
 .purchase-status small {
   display: block;
   color: #343c3e;
-  font-size: 5px;
+  font-size: 11px;
   line-height: 1.22;
-  white-space: nowrap;
 }
 
-.purchase-actions {
-  justify-self: start;
-  padding: 0;
+.expense-message,
+.expense-empty,
+.expense-split-note {
+  color: #4d5659;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.expense-message a {
+  color: var(--color-primary);
+}
+
+.expense-split-note {
+  margin: 0;
+}
+
+.expense-load-button {
+  margin-top: 12px;
+  padding: 5px 0;
   border: 0;
   background: transparent;
-  color: #283134;
-  font-family: inherit;
-  font-size: 11px;
-  line-height: 1;
+  color: var(--color-primary);
+  font: inherit;
   cursor: pointer;
+}
+
+.add-expense-button:disabled,
+#add-expense-form button:disabled {
+  opacity: .55;
+  cursor: default;
 }
 
 @media (max-width: 760px) {
   .expenses-shell {
     grid-template-columns: 160px minmax(0, 1fr);
-  }
-
-  .expenses-content {
-    overflow-x: auto;
-  }
-
-  .expenses-toolbar,
-  .purchase-panel {
-    min-width: 565px;
   }
 }
 
@@ -1858,6 +1857,22 @@ body {
 
   .expenses-content {
     padding-left: 14px;
+  }
+
+  .expenses-toolbar {
+    grid-template-columns: minmax(0, 1fr) 40px;
+  }
+
+  .expenses-search {
+    grid-column: 1 / -1;
+  }
+
+  .expense-filters {
+    justify-self: start;
+  }
+
+  .purchase-panel {
+    padding-inline: 12px;
   }
 }
 

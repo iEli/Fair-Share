@@ -14,7 +14,7 @@ For a quick walkthrough, open **Log in → View demo household** to reach the sa
 | --- | --- | --- |
 | Landing page and build | [App.vue](fairshare/src/App.vue), [Vite config](fairshare/vite.config.js) | Introduces FairShare and brings the site’s pages together.. Vue renders the landing page. Vite serves the HTML pages in `fairshare_site/` alongside it and includes them in the production build. |
 | Account screens | [Login](fairshare_site/login.html), [signup](fairshare_site/signup.html), [auth script](fairshare_site/auth.mjs), [auth client](fairshare_site/auth-client.mjs) | The forms call the Java API. Auth client handles the requests and stores the sign-in session in the browser. |
-| Dashboard and household pages | [Dashboard](fairshare_site/dashboard.html), [shared styles](fairshare_site/styles.css) | The dashboard links to inventory, expenses, balances, bills, shopping list, and activity. Dashboard, expenses, balances, bills, and activity currently show sample data. |
+| Dashboard and household pages | [Dashboard](fairshare_site/dashboard.html), [shared styles](fairshare_site/styles.css) | The dashboard links to inventory, expenses, balances, bills, shopping list, and activity. Dashboard, balances, bills, and activity currently show sample data. |
 | Inventory | [Inventory page](fairshare_site/inventory.html), [inventory script](fairshare_site/inventory.mjs), [guest storage](fairshare_site/inventory-store.mjs) | Lists items, adds items, and adjusts quantities. Signed-in users use the household inventory API. Guest inventory is saved in the browser. |
 | Shopping list | [Shopping list page](fairshare_site/shopping-list.html), [shopping list script](fairshare_site/shopping-list.mjs) | Adds items with an optional category and name of the person who added them. Additions are saved in the browser. |
 | Java API | [auth](fairshare-backend/src/main/java/fairshare_backend/auth), [households](fairshare-backend/src/main/java/fairshare_backend/households), [inventory](fairshare-backend/src/main/java/fairshare_backend/inventory), [expenses](fairshare-backend/src/main/java/fairshare_backend/expenses) | Handles account access, household management, inventory, and shared expenses. |
@@ -144,6 +144,11 @@ Example create request body:
 ```
 
 ### Household expenses
+
+On the [Expenses page](fairshare_site/expenses.html), select **+** to record an
+expense. Signed-in users save to the first household on their account, and the
+amount is split equally among its members. Guest expenses are stored in the
+current browser.
 
 All routes require a Supabase bearer token and current household membership.
 Paths below are relative to `/api/households/{householdId}/expenses`.
@@ -333,8 +338,7 @@ browser and not shared with other users or devices.
 Forms call `POST /api/auth/login` and `POST /api/auth/signup` as JSON. Signup checks
 matching passwords and forwards first/last names as Supabase display metadata.
 It shows a confirmation-email message when Supabase returns no session, and opens
-the dashboard when signup or login returns a session. The dashboard and expense
-page remain prototypes.
+the dashboard when signup or login returns a session. The dashboard still shows sample data.
 
 For separate frontend/backend deployments, set `VITE_API_BASE_URL` to the HTTPS
 Java backend origin **before building**, and include the frontend origin in the
