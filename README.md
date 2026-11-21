@@ -17,8 +17,8 @@ For a quick walkthrough, open **Log in → View demo household** to reach the sa
 | Dashboard and household pages | [Dashboard](fairshare_site/dashboard.html), [shared styles](fairshare_site/styles.css) | The dashboard links to inventory, expenses, balances, bills, shopping list, and activity. Dashboard, expenses, balances, bills, and activity currently show sample data. |
 | Inventory | [Inventory page](fairshare_site/inventory.html), [inventory script](fairshare_site/inventory.mjs), [guest storage](fairshare_site/inventory-store.mjs) | Lists items, adds items, and adjusts quantities. Signed-in users use the household inventory API. Guest inventory is saved in the browser. |
 | Shopping list | [Shopping list page](fairshare_site/shopping-list.html), [shopping list script](fairshare_site/shopping-list.mjs) | Adds items with an optional category and name of the person who added them. Additions are saved in the browser. |
-| Java API | [auth](fairshare-backend/src/main/java/fairshare_backend/auth), [households](fairshare-backend/src/main/java/fairshare_backend/households), [inventory](fairshare-backend/src/main/java/fairshare_backend/inventory) | Handles account access, household management, and inventory requests. |
-| Database | [Supabase migrations](supabase/migrations) | SQL defines the PostgreSQL tables for households, memberships, invitations, and inventory. |
+| Java API | [auth](fairshare-backend/src/main/java/fairshare_backend/auth), [households](fairshare-backend/src/main/java/fairshare_backend/households), [inventory](fairshare-backend/src/main/java/fairshare_backend/inventory), [expenses](fairshare-backend/src/main/java/fairshare_backend/expenses) | Handles account access, household management, inventory, and shared expenses. |
+| Database | [Supabase migrations](supabase/migrations) | SQL defines the PostgreSQL tables for households, memberships, invitations, inventory, and expenses. |
 | Tests and team docs | [Frontend tests](fairshare/tests), [backend tests](fairshare-backend/src/test), [team agreement](docs/TEAM%20AGREEMENT.md) | Checks key behaviors and documents how the team works together. |
 
 ## Project structure
@@ -33,7 +33,7 @@ For a quick walkthrough, open **Log in → View demo household** to reach the sa
 The Vue frontend contains the landing page. Its login and signup buttons open the
 shared HTML authentication pages, which call the Java API and support Supabase
 email confirmation. The backend supports signup, login, token refresh, logout, household management,
-and household-scoped inventory. Expense API endpoints are not implemented.
+household-scoped inventory, and shared expenses.
 
 ## Prerequisites
 
@@ -109,11 +109,13 @@ Apply `supabase/migrations/20260929211542_create_households_and_members.sql`
 to the intended Supabase project before using the household endpoints. It creates
 the household and membership tables and links users to Supabase Auth accounts.
 Also apply `supabase/migrations/20261102221100_create_inventory_items.sql` to
-create the household inventory table. The backend does not automatically apply
+create the household inventory table. Apply
+`supabase/migrations/20261121023244_create_expenses.sql` to enable expenses.
+The backend does not automatically apply
 migrations or create tables.
 Hibernate is configured to validate mapped schema.
 
-Household and inventory table access goes through the authenticated Java API.
+Household, inventory, and expense table access goes through the authenticated Java API.
 The migrations enable RLS and revoke direct browser Data API access to those
 tables.
 
@@ -140,6 +142,46 @@ Example create request body:
 ```json
 { "name": "Our apartment" }
 ```
+
+### Household expenses
+
+All routes require a Supabase bearer token and current household membership.
+Paths below are relative to `/api/households/{householdId}/expenses`.
+
+| Method | Path | Behavior |
+| --- | --- | --- |
+| `POST` | Collection | Creates an expense and its shares together. Returns `201` and a `Location` header. |
+| `GET` | Collection | Lists expenses newest first by purchase date. Accepts `limit` (default 20, maximum 100) and `offset` (default 0). |
+| `GET` | `/{expenseId}` | Returns the expense, original amount, shares, and outstanding amounts. |
+| `POST` | `/{expenseId}/shares/{memberId}/payments` | The original payer records a reimbursement and receives the updated expense. |
+
+To create an expense split equally among current members, send:
+
+```json
+{"description":"Groceries","amount":42.50,"spentOn":"2026-11-20"}
+```
+
+Amounts are USD with up to two decimal places. The authenticated caller is the
+payer. The date defaults to the current UTC date. Equal splits distribute leftover
+cents one at a time in household join order, with member IDs breaking ties.
+For a custom split, include a nonempty `shares` array of objects with `userId`
+and positive `amount` fields. Each user must belong to the household and may appear
+once. Shares must add up to the expense amount.
+
+Each share includes its original `amount` and its `outstandingAmount`. The payer's
+own share is covered automatically. The expense's `outstandingAmount` sums the
+remaining reimbursements across shares. Send a positive amount and a client-generated
+UUID to record a full or partial reimbursement:
+
+```json
+{"paymentId":"5bf42ac8-4d23-4a2b-8f8f-2f6773df7408","amount":12.50}
+```
+
+Reuse the same payment ID when retrying against the same share. The server returns
+the current expense without recording the payment again. A payment above the
+outstanding amount or reuse of a payment ID on that share with a different amount
+returns `409`. Other household members get `403` when attempting to record a payment.
+Missing or inaccessible households, expenses, and shares return `404`.
 
 ### Build and tests
 
